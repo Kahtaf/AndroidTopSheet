@@ -282,7 +282,8 @@ public class TopSheetBehavior<V extends View> extends CoordinatorLayout.Behavior
         if (mState == STATE_DRAGGING && action == MotionEvent.ACTION_DOWN) {
             return true;
         }
-        mViewDragHelper.processTouchEvent(event);
+        if (mViewDragHelper != null)
+            mViewDragHelper.processTouchEvent(event);
         // Record the velocity
         if (action == MotionEvent.ACTION_DOWN) {
             reset();
@@ -294,7 +295,7 @@ public class TopSheetBehavior<V extends View> extends CoordinatorLayout.Behavior
         // The ViewDragHelper tries to capture only the top-most View. We have to explicitly tell it
         // to capture the bottom sheet in case it is not captured and the touch slop is passed.
         if (action == MotionEvent.ACTION_MOVE && !mIgnoreEvents) {
-            if (Math.abs(mInitialY - event.getY()) > mViewDragHelper.getTouchSlop()) {
+            if (mViewDragHelper != null && Math.abs(mInitialY - event.getY()) > mViewDragHelper.getTouchSlop()) {
                 mViewDragHelper.captureChildView(child, event.getPointerId(event.getActionIndex()));
             }
         }
